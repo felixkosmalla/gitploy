@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load bootstrap3 %}
+
+
+{% block body_class %}login{% endblock body_class %}
+
+
+{% block content %}
+    
+        <div class="container">
+
+            <div class="row">
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-lg-offset-2">
+                    {% bootstrap_messages %}
+                </div>
+            </div>
+
+            <div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-4">
+
+                           <form method="POST" class="form-signin" role="form">
+                           {% csrf_token %}
+                            <h2 class="form-signin-heading">Please sign in</h2>
+                            <input name="username" type="text" class="form-control" placeholder="Username" required autofocus>
+                            <input name="password" type="password" class="form-control" placeholder="Password" required>
+                            <label class="checkbox">
+                              <input type="checkbox" name="remember_me" value="remember-me"> Remember me
+                            </label>
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                          </form>
+
+                    </div>
+            </div>
+        </div>
+
+
+{% endblock content %}

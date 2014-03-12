@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load bootstrap3 %}
+
+
+{% block site_title %}
+ClimbTrack Printerface | Einstellungen
+    
+{% endblock site_title %}
+
+
+{% block content %}
+    
+    <div class="container">
+
+      <div class="starter-template">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                {% bootstrap_messages %}
+                <h1>Einstellungen</h1>        
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <h2>Access Key</h2>
+            </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+
+            <form action="" method="POST" role="form">
+                {% csrf_token %}
+            
+                <div class="form-group">
+                    <label for="">neuer Access Key</label>
+                    <input type="text" name="key" class="form-control" id="" placeholder="Access">
+                </div>
+            
+                
+            
+                <button type="submit" class="btn btn-primary pull-right">Speichern</button>
+                <div class="clearfix"></div>
+            </form>
+
+
+
+            
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <h2>
+                    Drucker
+                </h2>
+            </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for printer in printers %}
+                    
+                
+                        <tr class="{% if standard_printer == printer.id %}   success   {% endif %} ">
+                            <td><a target="_blank" href="{{ cups }}printers/{{printer.id}}">{{printer.id}}</a></td>
+                            <td>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="is_printer_select" id="inputIs_printer_select" class="form-control" value="{{printer.id}}">
+                                <button type="submit" class="btn btn-sm btn-primary pull-right">Auswählen</button>
+                            </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>    
+
+                <a target="_blank" href="{{ cups }}" class="btn btn-info btn-block">Drucker hinzufügen</a>
+                
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <h2>Automatisch Drucken</h2>
+            </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                <br>
+                <input type="checkbox" class="bs-switch" id="auto-print" {% if auto_print %} checked  {% endif %}>
+            </div>
+        </div>
+        
+
+
+
+      </div>
+
+    </div><!-- /.container -->
+{% endblock content %}
+
+
+{% block extra_script %}
+    
+    
+    <script type="text/javascript">
+        $('#auto-print').on('switchChange',function(e, data){
+            // console.log(data);
+
+            $.ajax({
+                url: Urls.enableAutoPrint(),
+                type: 'GET',
+                data: {enable: data.value},
+            });
+            
+
+        });
+    </script>
+
+{% endblock extra_script %}
