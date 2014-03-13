@@ -12,6 +12,9 @@ urlpatterns = patterns('',
     
     url(r'^logout$', 'frontend.views.default.logout', name='logout'),
 
+
+    
+
     
     
     # url(r'^admin/', include(admin.site.urls)),

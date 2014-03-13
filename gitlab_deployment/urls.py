@@ -8,6 +8,8 @@ urlpatterns = patterns('',
     # url(r'^$', 'gitlab_deployment.views.home', name='home'),
     url(r'^', include('frontend.urls')),
 
+    url(r'^deployments/',include('deployments.urls')),
+
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^jsreverse/$', 'django_js_reverse.views.urls_js', name='js_reverse'),

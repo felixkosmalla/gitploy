@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% load bootstrap3 %}
+
+{% block body_class %}project{% endblock body_class %}
+
+{% block content %}
+    
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-lg-offset-2">
+            <h2>Project: {{project.name}} <a  class="btn  btn-sm btn-default pull-right">Edit Project</a><a href="{% url "add-deployment" project.id %}"  class="btn  btn-sm btn-primary pull-right">Add Deployment</a></h2>
+
+            {% if project.deployments.all %}
+                {% for deployment in project.deployments.all %}
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">{{deployment.name}}</h4>
+                        </div>
+                        <div class="panel-body">
+                        <div class="media">
+                            
+                            <div class="deployment-state {% if deployment.last_run_successful %}success {% else %} failed {% endif %} pull-left"></div>
+                            
+                            <div class="media-body">
+                                
+                                
+                                        <!-- Table -->
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Created</th><td>{{deployment.created_at|date:"d.m.Y H:i:s"}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Host</th><td>{{deployment.host}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Username</th><td>{{deployment.username}}</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <th>Last Run</th><td>{{deployment.last_run_at}}</td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <a  class="btn btn-default" href="{% url 'edit-deployment' deployment.id %}">Edit</a>
+                                        <a  class="btn btn-primary pull-right" target="_blank" href="{% url 'run-deployment' deployment.id %}">Run Now!</a>
+                                
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    
+                {% endfor %}
+            {% else %}
+                <h3>There are no deployments yet.</h3>
+                <a type="button" class="btn btn-success" href="{% url 'add-deployment' project.id %}">Create Deployment</a>   
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -19,6 +19,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '@i8zl04_d7=h(s0816#v^#qwgu1io&n51n(^1uhk72yv5-5%ee'
 
+ENCRYPTED_FIELD_KEYS_DIR = BASE_DIR + "/keys"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -39,6 +41,9 @@ INSTALLED_APPS = (
 
     'bootstrap3',
     'south',
+    'django_extensions',
+
+
     'deployments',
 
 
@@ -89,3 +94,7 @@ LOGIN_URL = "login"
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# import local (machine dependent settings)
+from settings_local import *

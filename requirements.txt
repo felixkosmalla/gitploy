@@ -1,8 +1,14 @@
+# install with 
+#   pip install --pre -r requirements.txt
+
+
 django
 south
 django-bootstrap3
 fabric
 requests
 django_js_reverse
+python-keyczar
+django-extensions
 
 

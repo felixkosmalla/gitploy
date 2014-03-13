@@ -8,4 +8,4 @@ from deployments.models import *
 admin.site.register(Project)
 admin.site.register(Deployment)
 admin.site.register(Hook)
-admin.site.register(DeploymentEvent)
+admin.site.register(DeploymentExecution)

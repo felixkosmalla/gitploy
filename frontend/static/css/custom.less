@@ -1,6 +1,11 @@
+@import "lesshat-prefixed.less";
+
 .alert{
     margin-top:20px;
 }
+
+
+
 
 
 
@@ -45,4 +50,42 @@
 }
 
     
+}
+
+
+.project{
+
+  .deployment-state{
+
+    .lh-border-radius(100%);
+
+    @size:40px;
+
+    width:@size;
+    height:@size;
+
+    margin-right:20px;
+
+    border:2px solid;
+
+
+    &.success{
+      background-color:#b5e600;
+
+      border-color:#c1f600;
+    }
+
+    &.failed{
+      background-color:#f60500;
+      border-color:#ff0500;
+    }
+
+  }
+
+  .panel{
+    margin-top:30px;
+  }
+
+
+
 }
