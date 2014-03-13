@@ -3,3 +3,5 @@
 *.pyc
 
 .DS_Store
+
+/gitlab_deployment/settings_local.py
