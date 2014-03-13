@@ -13,6 +13,13 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
+# where this files lives
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+
+# the parent directory
+SITE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
