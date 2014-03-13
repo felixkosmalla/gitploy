@@ -22,6 +22,7 @@ from django.http import HttpResponse
 DeploymentForm = modelform_factory(Deployment, fields=("name","host","username","password","shell_code"))
 
 
+@login_required
 def add_deployment(request, project_id):
 
 
@@ -54,7 +55,7 @@ def add_deployment(request, project_id):
 
 
 
-
+@login_required
 def edit_deployment(request, deployment_id):
 
 
@@ -83,7 +84,7 @@ def edit_deployment(request, deployment_id):
 
 
 
-
+@login_required
 def run_deployment(request, deployment_id):
 
     (success, output) = run_deployment_by_id(deployment_id)

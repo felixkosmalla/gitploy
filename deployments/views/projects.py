@@ -17,7 +17,7 @@ import django.dispatch
 
 ProjectForm = modelform_factory(Project, fields=("name",))
 
-
+@login_required
 def add_project(request):
 
 
@@ -46,6 +46,7 @@ def add_project(request):
 
     return render(request,"add_project.html", {'form':form})
 
+@login_required
 def project(request, project_id):
 
     try:
