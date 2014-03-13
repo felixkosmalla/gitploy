@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 import django.dispatch
 
-from simplecrypt import encrypt, decrypt
 
 from django.conf import settings
 
