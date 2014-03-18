@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<div class="panel-group" id="accordion">
+
+
+{% for execution in deployment.executions.all %}
+  <div class="panel panel-default">
+    <div class="panel-heading success">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{execution.id}}">
+          {{execution.run_at}} 
+
+        </a>
+        {% if execution.success %}
+            <span class="label label-success pull-right">Success</span>
+          {% else %}
+            <span class="label label-danger  pull-right">Failure</span>
+          {% endif %}
+      </h4>
+    </div>
+    <div id="collapse-{{execution.id}}" class="panel-collapse collapse in">
+      <div class="panel-body">
+        <pre>{{execution.output}}</pre>
+      </div>
+    </div>
+  </div>
+  
+{% endfor %}
+
+</div>  
+        
+      </div>  
+  </div>
+</div>
+
+{% endblock content %}
+
+
+{% block extra_script %}
+  
+  <script type="text/javascript">
+    $('.collapse').collapse();
+  </script>
+
+{% endblock extra_script %}

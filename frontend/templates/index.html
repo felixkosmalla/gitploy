@@ -4,8 +4,7 @@
 
 
 {% block site_title %}
-ClimbTrack Printerface
-    
+Deployments    
 {% endblock site_title %}
 
 
@@ -15,18 +14,94 @@ ClimbTrack Printerface
 
       <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            asd
-          <ul>
-              {% for project in projects %}
-                  <li><a href="{% url "project" project.id %}">{{project.name}}</a></li>
-              {% endfor %}
-          </ul>  
-              
+          
+          <a  class="btn btn-primary pull-right" href="{% url "add-project" %}">Add Project</a>
+
           </div>
       </div>
 
+      {% for project in projects %}
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{project.name}}
+              <a href="{% url "project" project.id %}" class="btn btn-default pull-right">Show</a>
+              <div class="clearfix"></div>
+              </h3>
+
+
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <h4>Deployments</h4>
+
+                  <table>
+                  {% for deployment in project.deployments.all %}
+                  <tr>
+                    <td>
+                      <a href="{% url "show-past-deployments" deployment.id %}" class="">{{deployment.name}}</a>
+                    </td>
+                    <td>
+                      {% if deployment.get_last_run.success %}
+                  <span class="label label-success">Last run successfull</span>
+                  {% else %}
+                  <span class="label label-danger">Last run failed</span>
+                  {% endif %}  
+                    </td>
+                  </tr>
+                  
+                  {% endfor %}                  
+                  </table>
+                  
+                  
+
+                    
+                    
+
+                  
+                  
+                </div>
+
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <h4>Hooks</h4>
+
+                  <table>
+                  {% for hook in project.hooks.all %}
+                    <tr>
+                      <td><a href="{% url 'edit-hook' hook.id %}">{{hook.name}}</a></td>
+                      <td>
+                        {% if hook.every_push %}
+                      <span class="label label-info">Always</span>
+                    {% else %}
+                    <span class="label label-default">Regexp</span>
+                    {% endif %}
+                      </td>
+                    </tr>
+                    
+
+                    
+                    
+                  {% endfor %}
+
+                  </table>
+
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
 
       </div>
+      {% endfor %}
+
+
+      
+      
 
     </div><!-- /.container -->
 {% endblock content %}

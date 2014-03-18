@@ -30,15 +30,17 @@ def run_deployment(deployment):
     password = deployment.password
     shell_code = deployment.shell_code
 
-    return execute_remote_code(host, user, password, shell_code)
+    return execute_remote_code(host, user, password, shell_code, deployment)
 
 
 
-def execute_remote_code(host_string, user, password, shell_code):
+def execute_remote_code(host_string, user, password, shell_code, deployment):
     """ Executes the remote shell code with the help of fabric"""
 
     output = StringIO.StringIO()
     success = True
+
+    output.write("Running deployment "+str(deployment)+"\n")
 
     try:
         with settings(host_string=host_string, user=user, password=password, abort_on_prompts=True):
@@ -57,6 +59,38 @@ def execute_remote_code(host_string, user, password, shell_code):
         success = False
 
     return (success, output.getvalue())
+
+
+def execute_hook(hook):
+
+    should_run = False
+
+    if hook.every_push:
+        should_run = True
+    else:
+        # check if the regex matches
+        # TODO
+        pass
+
+    output = StringIO.StringIO()
+    success = True
+
+    for deployment in hook.deployments.all():
+
+        (s,o) = run_deployment(deployment)
+
+        output.write(o+"\n-----------------------------------------------------------------------------------------\n")
+
+        if not s:
+            success = False
+
+    return (success, output.getvalue())
+
+
+
+
+
+
 
 
 

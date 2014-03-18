@@ -98,6 +98,23 @@ def run_deployment(request, deployment_id):
 
     return HttpResponse("<pre>"+output+"</pre>")
 
+@login_required
+def past_deployments(request, deployment_id):
+
+    d = Deployment.objects.get(id=deployment_id)
+
+    return render(request, "past_deployments.html", {'deployment':d})  
+
+
+
+def run_hook(request, hook_id, key):
+
+    hook = Hook.objects.get(id=hook_id, key=key)
+
+    (s, o) = execute_hook(hook)
+
+    return HttpResponse(o)
+
 
 
 # def deployment(request, project_id):

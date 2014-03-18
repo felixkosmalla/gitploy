@@ -10,13 +10,25 @@
     
 <div class="container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-lg-offset-2">
-            <h2>Project: {{project.name}} <a  class="btn  btn-sm btn-default pull-right">Edit Project</a><a href="{% url "add-deployment" project.id %}"  class="btn  btn-sm btn-primary pull-right">Add Deployment</a></h2>
-
-            {% if project.deployments.all %}
+        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-7 col-lg-offset-1">
+            <h2>{{project.name}} 
+            
+            </h2>
+        </div>
+        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-3">
+        <div class="btn-group">
+            <a  class="btn  btn-sm btn-default"><i class="glyphicon glyphicon-pencil"></i> Project</a>
+            <a href="{% url "add-deployment" project.id %}"  class="btn  btn-sm btn-primary">Add Deployment</a>
+            <a href="{% url "add-hook" project.id %}"  class="btn  btn-sm btn-primary">Add Hook</a>
+</div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-lg-offset-1">
+            
+            <h3>Deployments</h3>
+            {% if project.deployments.all %}    
                 {% for deployment in project.deployments.all %}
 
-                    <div class="panel panel-default">
+                    <div class="panel panel-default deployment deployment-id{{deployment.id}}">
                         <div class="panel-heading">
                             <h4 class="panel-title">{{deployment.name}}</h4>
                         </div>
@@ -48,8 +60,16 @@
                                             </tbody>
                                         </table>
 
-                                        <a  class="btn btn-default" href="{% url 'edit-deployment' deployment.id %}">Edit</a>
-                                        <a  class="btn btn-primary pull-right" target="_blank" href="{% url 'run-deployment' deployment.id %}">Run Now!</a>
+                                        <a  class="btn btn-default" href="{% url 'edit-deployment' deployment.id %}"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+                                        <a  class="btn btn-default" href="{% url 'show-past-deployments' deployment.id %}">
+                                        <i class="glyphicon glyphicon-list-alt"></i> Show past deployments 
+                                        <span class="badge">{{ deployment.executions.all | length }}</span></a>
+
+
+
+
+
+                                        <a  class="btn btn-primary pull-right run-deployment" data-deployment-id="{{deployment.id}}" data-deployment-name="{{deployment.name}}" target="_blank" href="{% url 'run-deployment' deployment.id %}"><i class="glyphicon glyphicon-refresh"></i> Run Now!</a>
                                 
                             </div>
                         </div>
@@ -62,8 +82,95 @@
                 <a type="button" class="btn btn-success" href="{% url 'add-deployment' project.id %}">Create Deployment</a>   
             {% endif %}
 
+
+            <h3>Hooks</h3>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>run on every push</th>
+                        <th>Regexp</th>
+                        <th>Deployments</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hook in project.hooks.all %}
+                    <tr>
+                        <td>{{hook.name}}</td>
+                        <td>{{hook.every_push}}</td>
+                        <td>{{hook.commit_message_regex}}</td>
+                        <td>
+                            {% for dep in hook.deployments.all %}
+                                {{dep.name}}</br>
+
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{% url "edit-hook" hook.id %}" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></a>
+                        </td>
+                    </tr>
+                        
+                    {% endfor %}
+                </tbody>
+            </table>    
+
+
+
         </div>
     </div>
 </div>
 
+
+<div class="modal fade">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title deployment-title"></h4>
+      </div>
+      <div class="modal-body">
+        <pre class="deployment-body">
+            
+        </pre>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
 {% endblock content %}
+
+
+{% block extra_script %}
+    <script type="text/javascript">
+
+    $('.run-deployment').click(function(e){
+        e.preventDefault();
+        var bt = $(this);
+        bt.button('loading');
+
+        var deployment_id = bt.attr('data-deployment-id');
+        var deployment_name = bt.attr('data-deployment-name');
+
+        $.ajax(bt.attr('href'), {
+            success:function(res){
+                bt.button('reset');
+
+                $('.modal-body').html("<pre>"+res+"</pre>");
+                $('.deployment-title').html(deployment_name);
+
+                $('.modal').modal()
+            }
+        });
+    });
+    </script>
+
+{% endblock extra_script %}

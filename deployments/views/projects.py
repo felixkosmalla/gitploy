@@ -31,12 +31,7 @@ def add_project(request):
             project.save()
 
             project.project_created.send(sender=project, project = project)
-
-
-            
-
             messages.add_message(request, messages.SUCCESS, "Project <i>"+project.name+"</i> created")
-
             return redirect(reverse("project",args=[project.id]))
 
             pass
