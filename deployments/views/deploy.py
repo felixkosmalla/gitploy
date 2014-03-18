@@ -89,12 +89,9 @@ def run_deployment(request, deployment_id):
 
     (success, output) = run_deployment_by_id(deployment_id)
 
-    # write execution to database
-    d = DeploymentExecution()
-    d.deployment_id = deployment_id
-    d.success = success
-    d.output = output
-    d.save()
+    deployment = Deployment.objects.get(id=deployment_id)
+
+    deployment.save_execution(success, output, None, request.user)
 
     return HttpResponse("<pre>"+output+"</pre>")
 

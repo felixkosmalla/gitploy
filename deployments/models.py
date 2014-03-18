@@ -70,6 +70,18 @@ class Deployment(models.Model):
     def __unicode__(self):
         return self.name
 
+    def save_execution(self, success, output, hook = None, invoked_by = None):
+
+        exe = DeploymentExecution()
+        exe.deployment = self
+        exe.invoked_by = invoked_by
+        exe.success = success
+        exe.output = output
+        exe.hook = hook
+        exe.save()
+
+        print "saved"
+
 
 
 class DeploymentExecution(models.Model):
@@ -79,6 +91,7 @@ class DeploymentExecution(models.Model):
 
     deployment = models.ForeignKey(Deployment, related_name='executions')
     run_at = models.DateTimeField(auto_now_add=True)
+    invoked_by = models.ForeignKey(User, null=True, blank=True)
     success = models.BooleanField()
     output = models.TextField()
     hook = models.ForeignKey("Hook", blank=True, null=True)

@@ -21,6 +21,14 @@
           {% else %}
             <span class="label label-danger  pull-right">Failure</span>
           {% endif %}
+
+
+        {% if execution.hook %}
+          <span class="label label-info pull-right">Hook: {{execution.hook.name}}</span>
+
+          {% else %}
+          <span class="label label-default pull-right">Invoked by {{execution.invoked_by}}</span>
+        {% endif %}
       </h4>
     </div>
     <div id="collapse-{{execution.id}}" class="panel-collapse collapse in">

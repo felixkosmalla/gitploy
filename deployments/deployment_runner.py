@@ -79,10 +79,15 @@ def execute_hook(hook):
 
         (s,o) = run_deployment(deployment)
 
+        # safe execution
+        deployment.save_execution(s,o, hook)
+
         output.write(o+"\n-----------------------------------------------------------------------------------------\n")
 
         if not s:
             success = False
+
+
 
     return (success, output.getvalue())
 
