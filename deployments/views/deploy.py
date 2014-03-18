@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
 from deployments.models import *
+from django.views.decorators.csrf import csrf_exempt
 
 
 from django.contrib import messages
@@ -103,7 +104,7 @@ def past_deployments(request, deployment_id):
     return render(request, "past_deployments.html", {'deployment':d})  
 
 
-
+@csrf_exempt
 def run_hook(request, hook_id, key):
 
     hook = Hook.objects.get(id=hook_id, key=key)
