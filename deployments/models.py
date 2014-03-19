@@ -10,7 +10,7 @@ from django.conf import settings
 
 from django_extensions.db.fields.encrypted import *
 
-import random
+import random, re
 from django.core.urlresolvers import reverse
 
 # Create your models here.
@@ -138,6 +138,17 @@ class Hook(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     key = models.CharField(max_length=200, unique = True)
+
+    def regex_matches(self, commit_message):
+        reg = self.commit_message_regex
+
+        if not re.search(reg, commit_message):
+            return False
+        else:
+            return True
+
+
+        pass
 
     def get_absolute_url(self):
         return reverse('run-hook',args=[self.id, self.key])

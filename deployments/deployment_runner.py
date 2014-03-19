@@ -2,10 +2,10 @@ from fabric.api import *
 
 from deployments.models import Deployment
 
-import StringIO
+import StringIO, pprint
 
 
-import traceback, sys
+import traceback, sys, json
 
 
 
@@ -61,31 +61,55 @@ def execute_remote_code(host_string, user, password, shell_code, deployment):
     return (success, output.getvalue())
 
 
-def execute_hook(hook):
+def execute_hook(hook, request):
 
     should_run = False
+
+    output = StringIO.StringIO()
 
     if hook.every_push:
         should_run = True
     else:
         # check if the regex matches
-        # TODO
+        
+        # get json from post
+        # 
+        output.write("received payload from gitlab\n\n")
+        payload = json.loads(request.body)
+        pp = pprint.PrettyPrinter(indent=4, stream=output)
+        pp.pprint(payload)
+
+
+        # debug
+        # pp.pprint(payload['commits'])
+
+        for commit in payload['commits']:
+            if hook.regex_matches(commit['message']):
+                output.write( "Regexp '"+hook.commit_message_regex+"' match on commit:\n")
+                pp.pprint(commit)
+                should_run = True            
+
         pass
 
-    output = StringIO.StringIO()
+    # output = StringIO.StringIO()
     success = True
+    if should_run:
+        
+        output.write("Starting deployments...\n")
+        for deployment in hook.deployments.all():
 
-    for deployment in hook.deployments.all():
+            (s,o) = (True, "")
+            #(s,o) = run_deployment(deployment)
 
-        (s,o) = run_deployment(deployment)
+            # safe execution
+            deployment.save_execution(s,o, hook)
 
-        # safe execution
-        deployment.save_execution(s,o, hook)
+            output.write(o+"\n-----------------------------------------------------------------------------------------\n")
 
-        output.write(o+"\n-----------------------------------------------------------------------------------------\n")
-
-        if not s:
-            success = False
+            if not s:
+                success = False
+    else:
+        output.write("We did not run \n")
 
 
 

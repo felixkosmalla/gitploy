@@ -109,7 +109,7 @@ def run_hook(request, hook_id, key):
 
     hook = Hook.objects.get(id=hook_id, key=key)
 
-    (s, o) = execute_hook(hook)
+    (s, o) = execute_hook(hook, request)
 
     return HttpResponse(o)
 
