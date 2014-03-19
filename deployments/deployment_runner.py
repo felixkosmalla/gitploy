@@ -98,8 +98,8 @@ def execute_hook(hook, request):
         output.write("Starting deployments...\n")
         for deployment in hook.deployments.all():
 
-            (s,o) = (True, "")
-            #(s,o) = run_deployment(deployment)
+            #(s,o) = (True, "")
+            (s,o) = run_deployment(deployment)
 
             # safe execution
             deployment.save_execution(s,o, hook)
