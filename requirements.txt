@@ -1,11 +1,14 @@
 # install with 
 #   pip install --pre -r requirements.txt
 
+# you may also have to do
+# sudo apt-get install python-dev
 
 django
 south
 django-bootstrap3
 fabric
+six
 requests
 django_js_reverse
 python-keyczar
