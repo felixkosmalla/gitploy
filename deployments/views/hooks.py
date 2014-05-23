@@ -13,11 +13,14 @@ from django.forms import ModelForm
 from django.forms.models import modelform_factory
 
 import django.dispatch
+import gitlab
+from django.conf import settings
 
 
 # HookForm = modelform_factory(Hook, fields=("every_push","commit_message_regex","deployments"))
 
 class HookForm(ModelForm):
+
     class Meta:
         model = Hook
         fields = ("name","every_push","commit_message_regex","deployments")
@@ -44,6 +47,26 @@ def add_hook(request, project_id):
             hook.creator = request.user
             hook.project_id = project_id
             hook.save()
+
+            register_hook = False
+
+            try:
+                tmp = request.POST['id_register_hook']
+                register_hook = True
+            except:
+                pass
+
+            if register_hook:
+                git = gitlab.Gitlab(settings.GITLAB_URL, request.user.settings.gitlab_token)
+                url_hook = request.build_absolute_uri(hook.get_absolute_url())
+
+                if git.addprojecthook(hook.project.gitlab_id, url_hook):
+                    messages.add_message(request, messages.SUCCESS, "Hook registered in GitLab")
+                else:
+                    messages.add_message(request, messages.ERROR, "Hook could not be registered")
+                
+
+
             
             #project.project_created.send(sender=project, project = project)
             messages.add_message(request, messages.SUCCESS, "Hook for project <i>"+hook.project.name+"</i> created")

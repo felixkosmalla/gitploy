@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
+from django.http import Http404
 
 from django.contrib.auth.decorators import login_required
 
@@ -30,7 +31,7 @@ def add_deployment(request, project_id):
     try:
         p = Project.objects.get(id=project_id)
     except:
-        pass
+        raise Http404
 
     if (request.method == "POST"):
 
@@ -40,12 +41,12 @@ def add_deployment(request, project_id):
             deployment = form.save(commit =False)
             deployment.creator = request.user
             deployment.project_id = project_id
-            print project_id
+            
             deployment.save()
 
             
             messages.add_message(request, messages.SUCCESS, "Deployment <i>"+deployment.name+"</i> created")
-
+            return redirect(reverse('project', args=[project_id])+'#deployment-'+str(deployment.id))
             
             pass
 

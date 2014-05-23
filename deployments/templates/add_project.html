@@ -17,7 +17,11 @@
             <form method="POST" class="form">
                 
             {% csrf_token %}
+
             {% bootstrap_form form %}
+
+            <a class="btn btn-info pull-left add-repo" href="{{ project_settings.GITLAB_URL }}/projects/new" target="_blank"><i class="fa fa-git"></i> Add Git Repositoy</a>
+            <a class="btn btn-warning pull-left reload" href="#"><i class="fa fa-refresh"></i> Refresh</a>
 
             <button type="submit" class="btn btn-primary pull-right" >
             {% bootstrap_icon "plus" %} Create Project
@@ -31,3 +35,38 @@
     </div>
 
 {% endblock content %}
+
+{% block extra_script %}
+    
+    <script type="text/javascript">
+
+
+        $('#project_select').change(function(){
+            var id = $('#project_select').val();
+            var label = $('#project_select option:selected').text();
+
+            $('#project_id').val(id);
+            $('#project_name').val(label);
+        });
+
+        $('#project_select').change();
+
+
+
+        $('.reload').hide();
+
+        $('.add-repo').click(function(){
+            setTimeout(function(){
+                $('.add-repo').hide();
+            $('.reload').show();
+            },1000);
+
+            
+        });
+
+        $('.reload').click(function(){
+            window.location.reload();
+        });
+    </script>
+
+{% endblock extra_script %}

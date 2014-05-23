@@ -12,7 +12,8 @@ urlpatterns = patterns('',
     
     url(r'^logout$', 'frontend.views.default.logout', name='logout'),
 
-
+	url(r'^profile$', 'frontend.views.profile.profile', name='profile'),
+	url(r'^profile/validate_token$', 'frontend.views.profile.validate_token', name='validate_token'),
     
 
     

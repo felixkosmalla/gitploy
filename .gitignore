@@ -5,3 +5,7 @@
 .DS_Store
 
 /gitlab_deployment/settings_local.py
+
+/node_modules/
+
+/env/

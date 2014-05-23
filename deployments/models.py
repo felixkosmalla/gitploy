@@ -1,19 +1,28 @@
 
 from django.db import models
-
 from django.contrib.auth.models import User
-
 import django.dispatch
-
-
 from django.conf import settings
-
 from django_extensions.db.fields.encrypted import *
-
 import random, re
 from django.core.urlresolvers import reverse
+import urllib, hashlib
 
 # Create your models here.
+
+
+class UserSettings(models.Model):
+
+    user = models.OneToOneField(User, related_name='settings')
+    gitlab_token = models.CharField(max_length = 200, default = None, blank=True, null = True)
+
+
+    @property
+    def profile_picture(self):
+        size = 40
+        email = self.user.email
+        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest()
+        return gravatar_url
 
 
 
@@ -22,6 +31,9 @@ class Project(models.Model):
     name = models.CharField(max_length=250)
     creator = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    
+    gitlab_id = models.IntegerField(max_length = 10)
 
 
     def __unicode__(self):
@@ -43,6 +55,8 @@ class Deployment(models.Model):
     username = models.CharField(max_length = 500)
     password = EncryptedCharField(max_length = 500)
     shell_code = models.TextField(max_length = 500)
+
+
 
 
     def get_last_run(self):
@@ -129,10 +143,10 @@ class Hook(models.Model):
         super(Hook, self).save(*args, **kwargs)  
 
     name = models.CharField(max_length=200)
-    every_push = models.BooleanField(default = False)
+    every_push = models.BooleanField(default = False, help_text="If checked, the hook gets executed on every push.")
     commit_message_regex = models.CharField(max_length=250, null=True, blank=True)
     project = models.ForeignKey(Project, related_name='hooks', null=True, blank=True)
-    deployments = models.ManyToManyField(Deployment, related_name='hooks')
+    deployments = models.ManyToManyField(Deployment, related_name='hooks', help_text="Select the deployments you want to be executed within this hook.<br>")
 
     creator = models.ForeignKey(User, null=True) 
     created_at = models.DateTimeField(auto_now_add=True, null=True)

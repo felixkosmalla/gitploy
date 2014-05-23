@@ -33,6 +33,17 @@
             {% csrf_token %}
             {% bootstrap_form form %}
 
+            <div class="form-group">
+                <div class="checkbox">
+                    <label title="You can also do this later manually.">
+                        <input id="id_register_hook" name="id_register_hook" class="" type="checkbox" name="register_hook">
+                        Register Hook in GitLab
+                    </label>
+                </div>
+                <span class="help-block">You can also do this later manually.</span>
+                
+            </div>
+
             <button type="submit" class="btn btn-primary pull-right" >
             {% bootstrap_icon "plus" %} Create Hook
         </button>

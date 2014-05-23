@@ -36,6 +36,8 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -49,6 +51,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'south',
     'django_extensions',
+    'django_js_reverse',        
 
 
     'deployments',
@@ -76,6 +79,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
     "deployments.context_processors.projects",
+    "deployments.context_processors.user_settings",
+    "deployments.context_processors.project_settings",
 )
 
 

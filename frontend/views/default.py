@@ -7,6 +7,11 @@ from django.contrib.auth import authenticate, login as ulogin, logout as ulogout
 from django.contrib import messages
 
 from deployments.models import *
+from django.http import HttpResponse
+from django.conf import settings
+import gitlab
+
+from django.views.decorators.csrf import csrf_exempt
 
 
 @login_required
@@ -46,3 +51,7 @@ def logout(request):
 
     ulogout(request)
     return redirect('index')
+
+
+
+    

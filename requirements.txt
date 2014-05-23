@@ -13,5 +13,7 @@ requests
 django_js_reverse
 python-keyczar
 django-extensions
+django-debug-toolbar
+pyapi-gitlab
 
 

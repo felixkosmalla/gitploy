@@ -9,16 +9,56 @@ from deployments.models import *
 from django.contrib import messages
 
 from django.forms import ModelForm
+from django import forms
 
 from django.forms.models import modelform_factory
 
 import django.dispatch
+import gitlab
 
 
-ProjectForm = modelform_factory(Project, fields=("name",))
+
+
+
 
 @login_required
 def add_project(request):
+
+
+    git = gitlab.Gitlab(settings.GITLAB_URL, request.user.settings.gitlab_token)
+
+    projects = git.getprojects()
+
+    choices = []
+
+    
+    project_in_db = Project.objects.all()
+    project_ids = []
+    for project in project_in_db:
+        project_ids.append(project.gitlab_id)
+
+
+    project_names = []
+
+    if(projects == False):
+        return redirect(reverse("profile"))
+    else:
+        for project in projects:
+            if not project['id'] in project_ids:
+                choices.append((project['id'], project['name_with_namespace']))
+
+        
+
+
+    class ProjectForm(forms.Form):
+        name = forms.CharField(max_length=200, widget = forms.HiddenInput(attrs={'id':'project_name'}), required=True)
+        gitlab_id = forms.IntegerField( widget = forms.HiddenInput(attrs={'id':'project_id'}), required=True)
+        projects = forms.CharField(max_length = 250, widget = forms.Select(choices = choices, attrs={'id':'project_select'}), required=True)
+
+
+        
+
+    
 
 
     if (request.method == "POST"):
@@ -26,9 +66,13 @@ def add_project(request):
         form = ProjectForm(request.POST)
 
         if form.is_valid():
-            project = form.save(commit =False)
+            project = Project()
+            project.name = form.cleaned_data['name']
+            project.gitlab_id = int(form.cleaned_data['gitlab_id'])
             project.creator = request.user
             project.save()
+            
+            
 
             project.project_created.send(sender=project, project = project)
             messages.add_message(request, messages.SUCCESS, "Project <i>"+project.name+"</i> created")

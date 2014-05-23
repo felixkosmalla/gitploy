@@ -9,15 +9,19 @@ Deployments
 
 
 {% block content %}
+
+
     
     <div class="container">
 
-      <div class="row">
+      <div class="row add-project-row">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           
-          <a  class="btn btn-primary pull-right" href="{% url "add-project" %}">Add Project</a>
+          <a class="btn btn-primary pull-right" href="{% url "add-project" %}"><i class="fa fa-plus"></i> Add Project</a>
 
+          <div class="clear"></div>
           </div>
+
       </div>
 
       {% for project in projects %}
@@ -25,8 +29,7 @@ Deployments
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">{{project.name}}
-              <a href="{% url "project" project.id %}" class="btn btn-default pull-right">Show</a>
+              <h3 class="panel-title"><a href="{% url "project" project.id %}">{{project.name}}</a></h3>     
               <div class="clearfix"></div>
               </h3>
 
@@ -41,7 +44,7 @@ Deployments
                   {% for deployment in project.deployments.all %}
                   <tr>
                     <td>
-                      <a href="{% url "show-past-deployments" deployment.id %}" class="">{{deployment.name}}</a>
+                      <a href="{% url "project" project.id %}#deployment-{{deployment.id}}" class="">{{deployment.name}}</a>
                     </td>
                     <td>
                       {% if deployment.get_last_run.success %}

@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "css/base.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/custom.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "vendor/bs_switch/css/bootstrap-switch.min.css" %}">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -59,7 +60,8 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
           {% if user.is_authenticated  %}
-            <li><a href="{% url "logout" %}">Logout ({{request.user}})</a></li>
+            <li><a href="{% url "profile" %}"><img class="profile_picture" src="{{user_settings.profile_picture}}">Felix Kosmalla</a></li>
+            <li><a href="{% url "logout" %}"><small><i class="fa fa-power-off"></i> Logout</small></a></li>
           {% endif %}
             
           </ul>
