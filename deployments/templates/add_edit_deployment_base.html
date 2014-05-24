@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+
+
+{% load staticfiles %}
+
+{% load bootstrap3 %}
+
+
+{% block body_class %}deployment{% endblock body_class %}
+
+{% block content %}
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-lg-offset-3">
+
+            <h3>{{project.name}} <a href="{% url 'project' project.id %}" class="btn btn-info btn-sm pull-right">Back to Project</a> </h3>
+            
+             <h4>
+             	{% block deployment_mode_title %}{% endblock deployment_mode_title %}
+             </h4>   
+
+
+
+            <form method="POST" class="form">
+                
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            
+            <button type="button" class="btn btn-info pull-left check-connection-settings">Check Connection Settings</button>
+
+            <button type="submit" class="btn btn-primary pull-right" >
+            {% block deployment_button_title %}
+            	
+            {% endblock deployment_button_title %}
+        </button>
+
+            </form>
+
+
+            <div class="clearfix"></div>
+
+             <div class="alert alert-warning"><b>Warning!</b> Currently the execution of shell code on remote machines is <b>stateless</b>. That means that you have to <i>cd</i> in directories in every single line, etc.
+             <pre>
+$ cd test && pwd
+/home/dummy/test
+
+$ pwd
+/home/dummy</pre>
+             </div>             
+
+            
+
+            </div>
+            
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+
+
+
+{% block extra_script %}
+	
+	<script type="text/javascript">
+		$(function(){
+			$('.check-connection-settings').click(function(){
+
+				$('.check-connection-settings').button('loading');
+
+				var user = $('#id_username').val();
+				var host = $('#id_host').val();
+				var password = $('#id_password').val();
+
+				
+
+
+				$.post(Urls.test_ssh(), {
+					'user':user,
+					'host':host,
+					'password':password
+				}, function(res){
+					$('.check-connection-settings').button('reset');
+					$('.check-connection-settings').removeClass("btn-info");
+					$('.check-connection-settings').removeClass("btn-success");
+					$('.check-connection-settings').removeClass("btn-danger");
+					if(res == 1){
+
+						$('.check-connection-settings').addClass("btn-success");
+						
+
+					}else{
+						$('.check-connection-settings').addClass("btn-danger");
+						
+					}
+				});
+
+			});
+		});
+	</script>
+
+{% endblock extra_script %}

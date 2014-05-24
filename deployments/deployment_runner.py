@@ -47,8 +47,6 @@ def execute_remote_code(host_string, user, password, shell_code, deployment):
             lines = shell_code.splitlines()
 
             for line in lines:
-
-
                 output.write("$ "+line+"\n")
                 res = run(line)
                 output.write(res.stdout+"\n"+res.stderr+"\n")

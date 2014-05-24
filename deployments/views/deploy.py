@@ -20,8 +20,10 @@ from deployments.deployment_runner import *
 
 from django.http import HttpResponse
 
+import deployments.ftp_synchronizer as ftp_sync
 
-DeploymentForm = modelform_factory(Deployment, fields=("name","host","username","password","shell_code"))
+
+DeploymentForm = modelform_factory(Deployment, fields=("name","deployment_type","host","username","password","ftp_home_dir", "shell_code"))
 
 
 @login_required
@@ -97,6 +99,35 @@ def run_deployment(request, deployment_id):
 
     return HttpResponse("<pre>"+output+"</pre>")
 
+@csrf_exempt
+def test_ssh(request):
+
+    user = request.POST['user']
+    host = request.POST['host']
+    password = request.POST['password']
+
+    success = True
+
+    try:
+        with settings(host_string=host, user=user, password=password, abort_on_prompts=True):
+            
+            
+            res = run('echo "test"')
+
+    except:
+        success = False
+
+
+    resp = "1"
+
+    if not success:
+        resp = "0"
+
+    return HttpResponse(resp)
+        
+
+
+
 @login_required
 def past_deployments(request, deployment_id):
 
@@ -126,4 +157,15 @@ def run_hook(request, hook_id, key):
 
 
 #     return render(request, "project.html",{'project':p})
+
+
+
+def git_test(request, deployment_id):
+
+    deployment = Deployment.objects.get(id=deployment_id)
+
+    (success, res) = ftp_sync.synchronize_deployment(deployment, request)
+
+
+    return HttpResponse(res)
 

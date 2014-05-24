@@ -24,7 +24,6 @@ import gitlab
 @login_required
 def add_project(request):
 
-
     git = gitlab.Gitlab(settings.GITLAB_URL, request.user.settings.gitlab_token)
 
     projects = git.getprojects()

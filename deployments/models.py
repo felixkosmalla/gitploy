@@ -7,6 +7,7 @@ from django_extensions.db.fields.encrypted import *
 import random, re
 from django.core.urlresolvers import reverse
 import urllib, hashlib
+from django.conf import settings
 
 # Create your models here.
 
@@ -36,6 +37,10 @@ class Project(models.Model):
     gitlab_id = models.IntegerField(max_length = 10)
 
 
+    def get_git_url(self):
+        pass
+
+
     def __unicode__(self):
         return self.name
 
@@ -54,8 +59,26 @@ class Deployment(models.Model):
     host = models.CharField(max_length = 500)
     username = models.CharField(max_length = 500)
     password = EncryptedCharField(max_length = 500)
+    #port = models.IntegerField(max_length =6, default = 22)
     shell_code = models.TextField(max_length = 500)
 
+
+    FTP_SYNC = "FTP"
+    SSH_SCRIPT = "SSH"
+    DEPLOYMENT_TYPES = (
+            (FTP_SYNC, "FTP synchronisation"),
+            (SSH_SCRIPT, "SSH script")
+        )
+
+
+    deployment_type = models.CharField(max_length=10, choices=DEPLOYMENT_TYPES, default = SSH_SCRIPT)
+
+    last_revision = models.CharField(max_length=260, default = "", blank=True)
+    ftp_home_dir = models.CharField(max_length = 200)
+
+
+    def get_repository_root(self):
+        return settings.REPOSITORY_ROOT + str(self.id)
 
 
 

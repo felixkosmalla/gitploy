@@ -15,5 +15,7 @@ python-keyczar
 django-extensions
 django-debug-toolbar
 pyapi-gitlab
+ftputil
+
 
 
