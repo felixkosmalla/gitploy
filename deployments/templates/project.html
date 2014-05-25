@@ -28,7 +28,10 @@
                     <a name="deployment-{{ deployment.id }}"></a>
                     <div class="panel panel-default deployment deployment-id{{deployment.id}}">
                         <div class="panel-heading">
-                            <h4 class="panel-title">{{deployment.name}}</h4>
+                            <h4 class="panel-title">{{deployment.name}}
+                            <span class="label label-success pull-right">{{deployment.deployment_type}}</span>
+
+                            </h4>
                         </div>
                         <div class="panel-body">
                         <div class="media">
@@ -39,10 +42,13 @@
                                 
                                 
                                         <!-- Table -->
-                                        <table class="table">
+                                        <table class="table table-condensed table-striped">
                                             <tbody>
                                                 <tr>
                                                     <th>Created</th><td>{{deployment.created_at|date:"d.m.Y H:i:s"}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Owner</th><td>{{deployment.creator}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Host</th><td>{{deployment.host}}</td>
@@ -58,9 +64,9 @@
                                             </tbody>
                                         </table>
 
-                                        <a  class="btn btn-default" href="{% url 'edit-deployment' deployment.id %}"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+                                        <a  class="btn btn-default" href="{% url 'edit-deployment' deployment.id %}"><i class="fa fa-edit"></i> Edit</a>
                                         <a  class="btn btn-default" href="{% url 'show-past-deployments' deployment.id %}">
-                                        <i class="glyphicon glyphicon-list-alt"></i> Show past deployments 
+                                        <i class="fa fa-history"></i> Show past deployments 
                                         <span class="badge">{{ deployment.executions.all | length }}</span></a>
 
 
@@ -87,20 +93,20 @@
             <a href="{% url "add-hook" project.id %}"  class="btn pull-right btn-sm btn-primary"><i class="fa fa-plus"></i> Add Hook</a>
             </h3>
 
-            <table class="table table-hover">
+            <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>run on every push</th>
                         <th>Regexp</th>
                         <th>Deployments</th>
-                        <th>Edit</th>
+                        <th><span class="pull-right">Edit</span></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for hook in project.hooks.all %}
                     <tr>
-                        <td>{{hook.name}}</td>
+                        <td><a href="{% url "edit-hook" hook.id %}">{{hook.name}}</a></td>
                         <td>{{hook.every_push}}</td>
                         <td>{{hook.commit_message_regex}}</td>
                         <td>
@@ -110,7 +116,7 @@
                             {% endfor %}
                         </td>
                         <td>
-                            <a href="{% url "edit-hook" hook.id %}" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a href="{% url "edit-hook" hook.id %}" class="btn btn-default btn-sm pull-right"><i class="fa fa-edit"></i> Edit Hook</a>
                         </td>
                     </tr>
                         

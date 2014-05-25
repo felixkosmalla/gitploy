@@ -12,10 +12,12 @@ import ftputil
 
 
 
-def synchronize_deployment(deployment, request):
+def synchronize_deployment(deployment):
 
-	gitlab_client = gitlab.Gitlab(settings.GITLAB_URL, request.user.settings.gitlab_token)
+	# initialize the gitlab client
+	gitlab_client = gitlab.Gitlab(settings.GITLAB_URL, deployment.creator.settings.gitlab_token)
 
+	# use this for output
 	output = StringIO.StringIO()
 
 	success = True
@@ -24,7 +26,7 @@ def synchronize_deployment(deployment, request):
 	# check if the repository is already there
 	repo_root = deployment.get_repository_root()
 
-
+	# shortcut to CD in the repository root
 	cd = "cd "+repo_root+" && "
 
 	output.write("Starting FTP Sync\n")
@@ -50,11 +52,14 @@ def synchronize_deployment(deployment, request):
 		cmd = "export GIT_SSL_NO_VERIFY=true && git clone "+gitlab_project['ssh_url_to_repo']+" "+repo_root
 		#output.write(cmd+"\n")
 
-		response = check_output(cmd, shell=True)
-		output.write("[GIT] Cloning Repository\n")
-		output.write(response.decode("utf-8")+"\n")
-
-
+		try:
+			output.write("[GIT] Cloning Repository\n")
+			response = check_output(cmd, shell=True)
+			output.write(response.decode("utf-8")+"\n")
+		except:
+			output.write("[GIT] Cloning failed\n")
+			output.write(response.decode("utf-8")+"\n")
+			return(False, output.getvalue())
 
 
 
@@ -103,8 +108,11 @@ def synchronize_deployment(deployment, request):
 
 
 	
-
-	host = ftputil.FTPHost("localhost", "felixkosmalla", "grumel88")
+	try:
+		host = ftputil.FTPHost(deployment.host, deployment.username, deployment.password)
+	except:
+		output.write("[FTP] Connection failed")
+		return(False, output.getvalue())
 
 
 

@@ -21,6 +21,8 @@ from deployments.deployment_runner import *
 from django.http import HttpResponse
 
 import deployments.ftp_synchronizer as ftp_sync
+import ftputil
+from fabric.api import *
 
 
 DeploymentForm = modelform_factory(Deployment, fields=("name","deployment_type","host","username","password","ftp_home_dir", "shell_code"))
@@ -100,22 +102,37 @@ def run_deployment(request, deployment_id):
     return HttpResponse("<pre>"+output+"</pre>")
 
 @csrf_exempt
-def test_ssh(request):
+def test_connection(request):
 
     user = request.POST['user']
     host = request.POST['host']
     password = request.POST['password']
+    deployment_type = request.POST['type']
+    ftp_home_dir = request.POST['ftp_home_dir']
 
     success = True
 
-    try:
-        with settings(host_string=host, user=user, password=password, abort_on_prompts=True):
-            
-            
-            res = run('echo "test"')
+    if deployment_type == Deployment.SSH_SCRIPT:
+        print "SSH"
 
-    except:
-        success = False
+        try:
+            with settings(host_string=host, user=user, password=password, abort_on_prompts=True):
+                
+                
+                res = run('echo "test"')
+
+        except Exception as e:
+            print e
+            success = False
+
+    elif deployment_type == Deployment.FTP_SYNC:
+
+        try:
+            host = ftputil.FTPHost(host, user, password)
+            host.chdir(ftp_home_dir)
+        except:
+            success = False
+
 
 
     resp = "1"
@@ -146,17 +163,6 @@ def run_hook(request, hook_id, key):
     return HttpResponse(o)
 
 
-
-# def deployment(request, project_id):
-
-#     try:
-#         p = Project.objects.get(id=project_id)
-
-#     except:
-#         return redirect("index")
-
-
-#     return render(request, "project.html",{'project':p})
 
 
 

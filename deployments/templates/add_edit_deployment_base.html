@@ -68,6 +68,48 @@ $ pwd
 	
 	<script type="text/javascript">
 		$(function(){
+
+
+
+
+			function changeView(){
+				var type = $('#id_deployment_type');
+
+				var elements_to_show = [];
+				var elements_to_hide = [];
+
+				if(type.val()=="FTP"){
+					elements_to_show.push($('#id_ftp_home_dir'));
+					elements_to_hide.push($('#id_shell_code'));
+				}	
+
+				if(type.val()=="SSH"){
+					elements_to_hide.push($('#id_ftp_home_dir'));
+					elements_to_show.push($('#id_shell_code'));
+				}
+
+
+				$.each(elements_to_hide, function(i,e){
+					e.parent().hide();
+				});
+
+				$.each(elements_to_show, function(i,e){
+					e.parent().show();
+				});
+
+
+			}
+
+			changeView();
+
+			$('#id_deployment_type').change(changeView);
+
+
+
+
+
+
+
 			$('.check-connection-settings').click(function(){
 
 				$('.check-connection-settings').button('loading');
@@ -75,14 +117,18 @@ $ pwd
 				var user = $('#id_username').val();
 				var host = $('#id_host').val();
 				var password = $('#id_password').val();
+				var ftp_home_dir = $('#id_ftp_home_dir').val();
+				var type = $('#id_deployment_type').val();
 
 				
 
 
-				$.post(Urls.test_ssh(), {
+				$.post(Urls.test_connection(), {
 					'user':user,
 					'host':host,
-					'password':password
+					'password':password,
+					'ftp_home_dir':ftp_home_dir,
+					'type':type
 				}, function(res){
 					$('.check-connection-settings').button('reset');
 					$('.check-connection-settings').removeClass("btn-info");

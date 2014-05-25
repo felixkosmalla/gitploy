@@ -7,6 +7,8 @@ import StringIO, pprint
 
 import traceback, sys, json
 
+from ftp_synchronizer import *
+
 
 
 def run_deployment_by_id(deployment_id):
@@ -30,7 +32,14 @@ def run_deployment(deployment):
     password = deployment.password
     shell_code = deployment.shell_code
 
-    return execute_remote_code(host, user, password, shell_code, deployment)
+    if deployment.deployment_type == Deployment.SSH_SCRIPT:
+        return execute_remote_code(host, user, password, shell_code, deployment)
+
+    elif deployment.deployment_type == Deployment.FTP_SYNC:
+        return synchronize_deployment(deployment)
+
+
+    
 
 
 

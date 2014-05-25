@@ -60,7 +60,7 @@ class Deployment(models.Model):
     username = models.CharField(max_length = 500)
     password = EncryptedCharField(max_length = 500)
     #port = models.IntegerField(max_length =6, default = 22)
-    shell_code = models.TextField(max_length = 500)
+    shell_code = models.TextField(max_length = 500, blank=True)
 
 
     FTP_SYNC = "FTP"
@@ -74,7 +74,7 @@ class Deployment(models.Model):
     deployment_type = models.CharField(max_length=10, choices=DEPLOYMENT_TYPES, default = SSH_SCRIPT)
 
     last_revision = models.CharField(max_length=260, default = "", blank=True)
-    ftp_home_dir = models.CharField(max_length = 200)
+    ftp_home_dir = models.CharField(max_length = 200, blank=True)
 
 
     def get_repository_root(self):

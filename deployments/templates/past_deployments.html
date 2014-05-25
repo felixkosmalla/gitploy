@@ -3,6 +3,13 @@
 {% block content %}
 
 <div class="container">
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <a href="{% url 'project' deployment.project.id %}">Back to project</a><br><br>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 <div class="panel-group" id="accordion">
@@ -21,7 +28,7 @@
           {% else %}
             <span class="label label-danger  pull-right">Failure</span>
           {% endif %}
-
+            <span class="pull-right">&nbsp;</span>
 
         {% if execution.hook %}
           <span class="label label-info pull-right">Hook: {{execution.hook.name}}</span>

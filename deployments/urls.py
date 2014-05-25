@@ -21,9 +21,9 @@ urlpatterns = patterns('',
     url(r'^deployment/(?P<deployment_id>\d*)/past-deployments$', 'deployments.views.deploy.past_deployments', name='show-past-deployments'),
 
 
-    url(r'^deployment/(?P<deployment_id>\d*)/git_test$', 'deployments.views.deploy.git_test', name='git-test-deployment'),
+    #url(r'^deployment/(?P<deployment_id>\d*)/git_test$', 'deployments.views.deploy.git_test', name='git-test-deployment'),
 
-    url(r'^test-ssh$','deployments.views.deploy.test_ssh', name="test_ssh"),
+    url(r'^test-connection$','deployments.views.deploy.test_connection', name="test_connection"),
 
     
     url(r'^hook/(?P<hook_id>\d*)/run/(?P<key>\w*)$', 'deployments.views.deploy.run_hook', name="run-hook"),
