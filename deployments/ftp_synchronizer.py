@@ -53,12 +53,13 @@ def synchronize_deployment(deployment):
 		#output.write(cmd+"\n")
 
 		try:
+			print os.getusername()
 			output.write("[GIT] Cloning Repository\n")
 			response = check_output(cmd, shell=True)
 			output.write(response.decode("utf-8")+"\n")
 		except:
 			output.write("[GIT] Cloning failed\n")
-			output.write(response.decode("utf-8")+"\n")
+			#output.write(response.decode("utf-8")+"\n")
 			return(False, output.getvalue())
 
 
