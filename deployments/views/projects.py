@@ -15,8 +15,7 @@ from django.forms.models import modelform_factory
 
 import django.dispatch
 import gitlab
-
-
+from django.conf import settings
 
 
 
@@ -55,10 +54,6 @@ def add_project(request):
         projects = forms.CharField(max_length = 250, widget = forms.Select(choices = choices, attrs={'id':'project_select'}), required=True)
 
 
-        
-
-    
-
 
     if (request.method == "POST"):
 
@@ -71,7 +66,8 @@ def add_project(request):
             project.creator = request.user
             project.save()
             
-            
+            git.adddeploykey(project.gitlab_id, 'Deployment Tool', settings.DEPLOY_KEY)
+            messages.add_message(request, messages.SUCCESS, "Added Deploy Key to <i>"+project.name+"</i>")
 
             project.project_created.send(sender=project, project = project)
             messages.add_message(request, messages.SUCCESS, "Project <i>"+project.name+"</i> created")
