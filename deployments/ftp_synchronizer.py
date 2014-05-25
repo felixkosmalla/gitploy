@@ -52,9 +52,9 @@ def synchronize_deployment(deployment):
 		cmd = "export GIT_SSL_NO_VERIFY=true && git clone "+gitlab_project['ssh_url_to_repo']+" "+repo_root
 		#output.write(cmd+"\n")
 
+		output.write("System user: "+os.getusername()) 
+		output.write("[GIT] Cloning Repository\n")
 		try:
-			print os.getusername()
-			output.write("[GIT] Cloning Repository\n")
 			response = check_output(cmd, shell=True)
 			output.write(response.decode("utf-8")+"\n")
 		except:
