@@ -8,6 +8,7 @@ import StringIO, pprint
 
 import ftplib
 import ftputil
+import getpass
 
 
 
@@ -52,7 +53,7 @@ def synchronize_deployment(deployment):
 		cmd = "export GIT_SSL_NO_VERIFY=true && git clone "+gitlab_project['ssh_url_to_repo']+" "+repo_root
 		#output.write(cmd+"\n")
 
-		output.write("System user: "+os.getusername()) 
+		output.write("System user: "+getpass.getuser()) 
 		output.write("[GIT] Cloning Repository\n")
 		try:
 			response = check_output(cmd, shell=True)
