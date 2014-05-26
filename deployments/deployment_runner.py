@@ -58,7 +58,7 @@ def execute_remote_code(host_string, user, password, shell_code, deployment):
 
             for line in lines:
                 output.write("$ "+line+"\n")
-                res = fabric.api.run(line)
+                res = fabric.api.run(line, stdout=output)
                 output.write(res.stdout+"\n"+res.stderr+"\n")
     except:
         exc_type, exc_obj, exc_tb = sys.exc_info()
