@@ -62,7 +62,7 @@ def execute_remote_code(host_string, user, password, shell_code, deployment):
     except:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         # traceback.print_exc(file=output)
-        output.write("Exception:" +str(exc_type)+"\n")
+        output.write("Exception:" +str(exc_type)+" - "+str(exc_obj)+"\n")
         success = False
 
     return (success, output.getvalue())
