@@ -1,4 +1,5 @@
 from fabric.api import *
+import fabric.api
 
 from deployments.models import Deployment
 
@@ -52,12 +53,12 @@ def execute_remote_code(host_string, user, password, shell_code, deployment):
     output.write("Running deployment "+str(deployment)+"\n")
 
     try:
-        with settings(host_string=host_string, user=user, password=password, abort_on_prompts=True):
+        with fabric.api.settings(host_string=host_string, user=user, password=password, abort_on_prompts=True):
             lines = shell_code.splitlines()
 
             for line in lines:
                 output.write("$ "+line+"\n")
-                res = run(line)
+                res = fabric.api.run(line)
                 output.write(res.stdout+"\n"+res.stderr+"\n")
     except:
         exc_type, exc_obj, exc_tb = sys.exc_info()
