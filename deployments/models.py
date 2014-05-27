@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.contrib.auth.models import User
 import django.dispatch
@@ -8,6 +7,9 @@ import random, re
 from django.core.urlresolvers import reverse
 import urllib, hashlib
 from django.conf import settings
+from django.db.models.signals import post_delete
+import shutil
+
 
 # Create your models here.
 
@@ -118,6 +120,17 @@ class Deployment(models.Model):
         exe.save()
 
         print "saved"
+
+
+def delete_repository_if_existent(sender, **kwargs):
+
+    deployment = kwargs['instance']    
+    shutil.rmtree(deployment.get_repository_root())
+
+
+
+post_delete.connect(delete_repository_if_existent, Deployment)
+
 
 
 
