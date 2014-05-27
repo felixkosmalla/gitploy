@@ -16,7 +16,7 @@ from django.forms.models import modelform_factory
 import django.dispatch
 import gitlab
 from django.conf import settings
-
+from django.http import HttpResponse
 
 
 
@@ -91,3 +91,14 @@ def project(request, project_id):
 
 
     return render(request, "project.html",{'project':p})
+
+@login_required
+def delete_project(request, project_id):
+
+    try:
+        p= Project.objects.get(id=project_id)
+        p.delete()
+    except:
+        return HttpResponse("0")
+
+    return HttpResponse("1")

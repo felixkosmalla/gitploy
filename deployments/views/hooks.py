@@ -15,6 +15,7 @@ from django.forms.models import modelform_factory
 import django.dispatch
 import gitlab
 from django.conf import settings
+from django.http import HttpResponse
 
 
 # HookForm = modelform_factory(Hook, fields=("every_push","commit_message_regex","deployments"))
@@ -102,4 +103,13 @@ def edit_hook(request, hook_id):
         form = HookForm(instance=d, current_project_id=d.project_id)
 
     return render(request,"edit_hook.html", {'form':form, 'hook':d, 'project':d.project, 'url':url})
+
+@login_required
+def delete_hook(request, hook_id):
+
+    
+    p= Hook.objects.get(id=hook_id)
+    p.delete()
+    
+    return HttpResponse("1")    
 

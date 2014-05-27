@@ -176,5 +176,12 @@ def git_test(request, deployment_id):
     return HttpResponse(res)
 
 
+@login_required
+def delete_deployment(request, deployment_id):
+
     
+    p= Deployment.objects.get(id=deployment_id)
+    p.delete()
+    
+    return HttpResponse("1")    
 

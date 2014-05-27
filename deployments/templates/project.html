@@ -25,6 +25,7 @@
             </h3>
             {% if project.deployments.all %}    
                 {% for deployment in project.deployments.all %}
+                    <div id="deployment-{{deployment.id}}">
                     <a name="deployment-{{ deployment.id }}"></a>
                     <div class="panel panel-default deployment deployment-id{{deployment.id}}">
                         <div class="panel-heading">
@@ -64,20 +65,23 @@
                                             </tbody>
                                         </table>
 
-                                        <a  class="btn btn-default" href="{% url 'edit-deployment' deployment.id %}"><i class="fa fa-edit"></i> Edit</a>
                                         <a  class="btn btn-default" href="{% url 'show-past-deployments' deployment.id %}">
                                         <i class="fa fa-history"></i> Show past deployments 
                                         <span class="badge">{{ deployment.executions.all | length }}</span></a>
 
+                                        <div class="btn-group pull-right">
 
+                                        <button type="button" class="btn btn-danger delete-deployment btn-sm" data-deployment-id="{{deployment.id}}"><i class="fa fa-trash-o"></i> Delete Deployment</button>
 
-
-
-                                        <a  class="btn btn-primary pull-right run-deployment" data-deployment-id="{{deployment.id}}" data-deployment-name="{{deployment.name}}" target="_blank" href="{% url 'run-deployment' deployment.id %}"><i class="glyphicon glyphicon-refresh"></i> Run Now!</a>
+                                        <a  class="btn btn-primary run-deployment  btn-sm" data-deployment-id="{{deployment.id}}" data-deployment-name="{{deployment.name}}" target="_blank" href="{% url 'run-deployment' deployment.id %}"><i class="glyphicon glyphicon-refresh"></i> Run Now!</a>
+                                        <a  class="btn btn-default btn-sm" href="{% url 'edit-deployment' deployment.id %}"><i class="fa fa-edit"></i> Edit</a>
+                                        
+                                        </div>
                                 
                             </div>
                         </div>
                         </div>
+                    </div>
                     </div>
                     
                 {% endfor %}
@@ -105,7 +109,7 @@
                 </thead>
                 <tbody>
                     {% for hook in project.hooks.all %}
-                    <tr>
+                    <tr id="hook-{{hook.id}}">
                         <td><a href="{% url "edit-hook" hook.id %}">{{hook.name}}</a></td>
                         <td>{{hook.every_push}}</td>
                         <td>{{hook.commit_message_regex}}</td>
@@ -116,7 +120,10 @@
                             {% endfor %}
                         </td>
                         <td>
-                            <a href="{% url "edit-hook" hook.id %}" class="btn btn-default btn-sm pull-right"><i class="fa fa-edit"></i> Edit Hook</a>
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-danger btn-sm delete-hook" data-hook-id="{{hook.id}}" ><i class="fa fa-trash-o"></i> Delete Hook</button>
+                                <a href="{% url "edit-hook" hook.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i> Edit Hook</a>
+                            </div>
                         </td>
                     </tr>
                         
@@ -128,6 +135,19 @@
 
         </div>
     </div>
+
+    <div class="row">
+        <br>
+        <hr>
+        <br>
+        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            
+        </div>
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" style="text-align:center">
+            <button type="button" class="btn btn-danger delete-project" data-project-id="{{project.id}}"><i class="fa fa-trash-o"></i> Delete Project</button>    
+        </div>
+    </div>
+
 </div>
 
 
@@ -159,7 +179,52 @@
 
 {% block extra_script %}
     <script type="text/javascript">
+    //// delete project
+    $('.delete-project').click(function(){
+        var id = $('.delete-project').attr('data-project-id');
 
+        bootbox.confirm("Do you really want to delete the project, including all deployments and hooks?", function(resp){
+            if(resp == true){
+               $.get(Urls.delete_project(id), {}, function(){
+                    window.location.href = Urls.index();
+                }); 
+            }
+        });
+
+
+    });
+
+    //// delete deployment
+    $('.delete-deployment').click(function(){
+        var id = $('.delete-deployment').attr('data-deployment-id');
+
+        bootbox.confirm("Do you really want to delete the deployment?", function(resp){
+            if(resp == true){
+               $.get(Urls.delete_deployment(id), {}, function(){
+                    $('#deployment-'+id).fadeOut();
+                }); 
+            }
+        });
+
+
+    });
+    //// delete hook
+    $('.delete-hook').click(function(){
+        var id = $('.delete-hook').attr('data-hook-id');
+
+        bootbox.confirm("Do you really want to delete the hook?", function(resp){
+            if(resp == true){
+               $.get(Urls.delete_hook(id), {}, function(){
+                    $('#hook-'+id).fadeOut();
+                }); 
+            }
+        });
+
+
+    });
+
+
+    //// run deployment
     $('.run-deployment').click(function(e){
         e.preventDefault();
         var bt = $(this);

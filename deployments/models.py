@@ -123,9 +123,12 @@ class Deployment(models.Model):
 
 
 def delete_repository_if_existent(sender, **kwargs):
-
-    deployment = kwargs['instance']    
-    shutil.rmtree(deployment.get_repository_root())
+    try:
+        deployment = kwargs['instance']    
+        shutil.rmtree(deployment.get_repository_root())
+    except:
+        # we don't have a dir to delete
+        pass
 
 
 
