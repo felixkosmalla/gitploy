@@ -60,7 +60,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
           {% if user.is_authenticated  %}
-            <li><a href="{% url "profile" %}"><img class="profile_picture" src="{{user_settings.profile_picture}}">{{user}}</a></li>
+            <li><a href="{% url "profile" %}"><img class="profile_picture" src="{{user_settings.profile_picture}}">{{user.first_name}} {{user.last_name}}</a></li>
             <li><a href="{% url "logout" %}"><small><i class="fa fa-power-off"></i> Logout</small></a></li>
           {% endif %}
             
