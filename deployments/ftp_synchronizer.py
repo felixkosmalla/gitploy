@@ -118,7 +118,7 @@ def synchronize_deployment(deployment):
 		return(False, output.getvalue())
 
 
-	output.wirte("[FTP] Changing directory: "+deployment.ftp_home_dir)
+	output.write("[FTP] Changing directory: "+deployment.ftp_home_dir)
 	host.chdir(deployment.ftp_home_dir)
 
 	created_dirs = []
