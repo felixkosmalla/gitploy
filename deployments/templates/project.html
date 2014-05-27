@@ -73,8 +73,10 @@
 
                                         <button type="button" class="btn btn-danger delete-deployment btn-sm" data-deployment-id="{{deployment.id}}"><i class="fa fa-trash-o"></i> Delete Deployment</button>
 
-                                        <a  class="btn btn-primary run-deployment  btn-sm" data-deployment-id="{{deployment.id}}" data-deployment-name="{{deployment.name}}" target="_blank" href="{% url 'run-deployment' deployment.id %}"><i class="glyphicon glyphicon-refresh"></i> Run Now!</a>
                                         <a  class="btn btn-default btn-sm" href="{% url 'edit-deployment' deployment.id %}"><i class="fa fa-edit"></i> Edit</a>
+
+                                        <a  class="btn btn-primary run-deployment  btn-sm" data-deployment-id="{{deployment.id}}" data-deployment-name="{{deployment.name}}" target="_blank" href="{% url 'run-deployment' deployment.id %}"><i class="glyphicon glyphicon-refresh"></i> Run Now!</a>
+                                        
                                         
                                         </div>
                                 
