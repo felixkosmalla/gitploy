@@ -60,7 +60,7 @@ class Deployment(models.Model):
 
     host = models.CharField(max_length = 500)
     username = models.CharField(max_length = 500)
-    password = EncryptedCharField(max_length = 500)
+    password = EncryptedCharField(max_length = 500, blank=True)
     #port = models.IntegerField(max_length =6, default = 22)
     shell_code = models.TextField(max_length = 500, blank=True)
 

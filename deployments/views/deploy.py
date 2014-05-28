@@ -118,11 +118,14 @@ def test_connection(request):
         try:
             with settings(host_string=host, user=user, password=password, abort_on_prompts=True):
                 
-                
-                res = run('echo "test"')
+                try:
+                    res = run('echo "test"')
+                except:
+                    success = False
 
-        except Exception as e:
-            print e
+
+
+        except:
             success = False
 
     elif deployment_type == Deployment.FTP_SYNC:
@@ -169,7 +172,6 @@ def run_hook(request, hook_id, key):
 def git_test(request, deployment_id):
 
     deployment = Deployment.objects.get(id=deployment_id)
-
     (success, res) = ftp_sync.synchronize_deployment(deployment, request)
 
 

@@ -43,7 +43,8 @@ def profile(request):
 
 
 	return render(request, "profile.html",{
-		'form':form
+		'form':form,
+		'public_key':settings.DEPLOY_KEY
 		})
 
 @csrf_exempt
