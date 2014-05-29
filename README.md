@@ -176,7 +176,7 @@ Create a symlink to the supervisor configuration.
 	
 Restart supervisor
 
-	sudo supervisorctl reload
+	sudo service supervisor restart
 	
 	
 Done!
