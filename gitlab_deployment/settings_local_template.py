@@ -17,6 +17,6 @@ DEPLOY_KEY = "ssh-rsa ......"
 
 
 ALLOWED_HOSTS = [
-	"your-company.org"
+	".your-company.org"
 ]
 
