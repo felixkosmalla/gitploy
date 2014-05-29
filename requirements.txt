@@ -4,6 +4,8 @@
 # you may also have to do
 # sudo apt-get install python-dev
 
+gunicorn
+
 django
 south
 django-bootstrap3

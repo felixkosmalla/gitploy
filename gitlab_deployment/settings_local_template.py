@@ -9,7 +9,7 @@ TEMPLATE_DEBUG = DEBUG
 
 STATIC_ROOT = "/home/gitploy/document_root/static/"
 
-REPOSITORY_ROOT = "/home/gitploy/repositories"
+REPOSITORY_ROOT = "/home/gitploy/repositories/"				# WITH TRAILING SLASH!
 
 GITLAB_URL = "http://git.your-company.org"
 
