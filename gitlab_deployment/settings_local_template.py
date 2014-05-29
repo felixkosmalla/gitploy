@@ -6,6 +6,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 
+
 STATIC_ROOT = "/home/gitploy/document_root/static/"
 
 REPOSITORY_ROOT = "/home/gitploy/repositories"
@@ -13,4 +14,9 @@ REPOSITORY_ROOT = "/home/gitploy/repositories"
 GITLAB_URL = "http://git.your-company.org"
 
 DEPLOY_KEY = "ssh-rsa ......"
+
+
+ALLOWED_HOSTS = [
+	"your-company.org"
+]
 
