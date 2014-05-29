@@ -1,76 +1,236 @@
 <!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <title>GitPloy by felixkosmalla</title>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="GitPloy : Use GitLab with GitPloy to build your own self contained Beanstalk clone. Still WIP, though" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>GitPloy</title>
   </head>
 
   <body>
-    <div id="container">
-      <div class="inner">
 
-        <header>
-          <h1>GitPloy</h1>
-          <h2>Use GitLab with GitPloy to build your own self contained Beanstalk clone. Still WIP, though</h2>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/felixkosmalla/gitploy">View on GitHub</a>
+
+          <h1 id="project_title">GitPloy</h1>
+          <h2 id="project_tagline">Use GitLab with GitPloy to build your own self contained Beanstalk clone. Still WIP, though</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/felixkosmalla/gitploy/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/felixkosmalla/gitploy/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
+    </div>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/felixkosmalla/gitploy/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/felixkosmalla/gitploy/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/felixkosmalla/gitploy" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="gitploy" class="anchor" href="#gitploy"><span class="octicon octicon-link"></span></a>GitPloy</h1>
 
-        <hr>
+<p>GitPloy enables you to build your own self-contained versioning and deployment system. Backed by <a href="https://www.djangoproject.com/">Django</a> it seamlessly integrates with your GitLab installation and allows you to host your repositories and push changes directly to your staging or production servers, either via remote execution of shell scripts or FTP synchronization. Deployment Hooks is inspired by Beanstalk. </p>
 
-        <section id="main_content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+<h1>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>Since GitPloy runs with Django, the setup follows the standard steps like a normal Django installation. I made good experiences with a stack of <a href="http://nginx.org/">nginx</a>, <a href="http://supervisord.org/">supervisor</a> and <a href="http://gunicorn.org/">gunicorn</a>.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<p>The following instruction is written for Ubuntu, but I'm sure it is very similar to other Linux distributions.</p>
+
+<h2>
+<a name="installing-the-stack" class="anchor" href="#installing-the-stack"><span class="octicon octicon-link"></span></a>Installing the stack</h2>
+
+<p>Install gitlab following this instruction.
+<a href="https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/installation.md">https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/installation.md</a></p>
+
+<p>Install nginx</p>
+
+<pre><code>sudo apt-get install nginx  
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>Install the python-dev package</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<pre><code>sudo apt-get install python-dev
+</code></pre>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>Install PIP, the package manager for python. <a href="http://pip.readthedocs.org/en/latest/installing.html">Read the original instruction</a></p>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<pre><code>mkdir downloads
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python get-pip.py
+</code></pre>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>Install supervisor and <a href="https://virtualenv.pypa.io/en/latest/">virtualenv</a></p>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<pre><code>sudo apt-get install supervisor
+sudo pip install virtualenv
+</code></pre>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<h2>
+<a name="create-a-system-user" class="anchor" href="#create-a-system-user"><span class="octicon octicon-link"></span></a>Create a System User</h2>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<p>Ok, you have the basics now, let's create a system user and a ssh key. Chose the default settings for the ssh key.</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-        </section>
+<pre><code>sudo adduser --disabled-login --gecos 'GitPloy' gitploy
+sudo su gitploy
+ssh-keygen -t rsa
+</code></pre>
 
-        <footer>
-          GitPloy is maintained by <a href="https://github.com/felixkosmalla">felixkosmalla</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
+<p>We also need to disable host-key checking for your repository machine.</p>
 
-        
-      </div>
+<pre><code>echo -e "Host git.YOUR_COMPANY.org\n\tStrictHostKeyChecking no\n" &gt;&gt; ~/.ssh/config
+</code></pre>
+
+<h2>
+<a name="get-the-latest-gitploy-" class="anchor" href="#get-the-latest-gitploy-"><span class="octicon octicon-link"></span></a>Get the Latest GitPloy </h2>
+
+<p>We store all the GitPloy files in our new user's home directory</p>
+
+<pre><code>cd ~
+mkdir gitploy
+cd gitploy
+
+git clone https://github.com/felixkosmalla/gitploy.git .
+git checkout 1-0-stable
+</code></pre>
+
+<h2>
+<a name="create-a-virtual-environment-and-activate-it" class="anchor" href="#create-a-virtual-environment-and-activate-it"><span class="octicon octicon-link"></span></a>Create a Virtual Environment and Activate it</h2>
+
+<pre><code>cd ~
+virtualenv env
+source env/bin/activate
+</code></pre>
+
+<h2>
+<a name="install-the-requirements" class="anchor" href="#install-the-requirements"><span class="octicon octicon-link"></span></a>Install the Requirements</h2>
+
+<p>Your virtual environment still has to be activated</p>
+
+<pre><code>cd ~
+cd gitploy
+pip install --pre -r requirements.txt
+</code></pre>
+
+<h2>
+<a name="install-a-database" class="anchor" href="#install-a-database"><span class="octicon octicon-link"></span></a>Install a Database</h2>
+
+<p>If you want, you can install a database like Postgres or MySQL but you can also run the installation on Sqlite which is the default setting. For this you have to do nothing.</p>
+
+<p>TODO: Postgres installation</p>
+
+<h2>
+<a name="edit-you-local-settings" class="anchor" href="#edit-you-local-settings"><span class="octicon octicon-link"></span></a>Edit You Local Settings</h2>
+
+<pre><code>cd ~
+cd gitploy
+cd gitlab_deployment
+cp settings_local_template.py settings_local.py
+editor settings_local.py
+</code></pre>
+
+<p>You can find out your public key by doing</p>
+
+<pre><code>cat ~/.ssh/id_rsa.pub
+</code></pre>
+
+<h2>
+<a name="create-some-directories" class="anchor" href="#create-some-directories"><span class="octicon octicon-link"></span></a>Create Some Directories</h2>
+
+<pre><code>cd ~
+mkdir repositories
+mkdir document_root
+mkdir document_root/static
+mkdir logs
+
+touch logs/supervisor.log
+touch logs/supervisor_stdout.log
+touch logs/supervisor_stderr.log
+touch logs/nginx_access.log
+touch logs/nginx_error.log
+</code></pre>
+
+<h2>
+<a name="setup-your-database-and-static-files" class="anchor" href="#setup-your-database-and-static-files"><span class="octicon octicon-link"></span></a>Setup your Database and Static Files</h2>
+
+<pre><code>cd ~
+cd gitploy
+./manage.py syncdb
+./manage.py migrate
+./manage.py collectstatic --noinput
+</code></pre>
+
+<h2>
+<a name="test-your-django-installation" class="anchor" href="#test-your-django-installation"><span class="octicon octicon-link"></span></a>Test your Django Installation</h2>
+
+<p>Wow, halfway done. Let's see if everything went right so far.</p>
+
+<pre><code>./manage.py runserver 0.0.0.0:8000
+</code></pre>
+
+<p>You see something that is not an error page? Good job, let's continue!</p>
+
+<h2>
+<a name="configure-nginx" class="anchor" href="#configure-nginx"><span class="octicon octicon-link"></span></a>Configure Nginx</h2>
+
+<p>Find the line where it says <em>server_name</em> and change that according to the desired URL of your gitploy installation. We than create a symlink to the sites configuration of nginx.</p>
+
+<pre><code>cd ~
+editor gitploy/server_conf/gitploy_nginx
+</code></pre>
+
+<p>We need to do this as sudo, so exit from the user <em>gitploy</em> and create some symlinks.</p>
+
+<pre><code>exit
+sudo ln -s /home/gitploy/gitploy/server_conf/gitploy_nginx /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/gitploy_nginx /etc/nginx/sites-enabled/
+</code></pre>
+
+<p>Restart nginx</p>
+
+<pre><code>sudo service nginx restart
+</code></pre>
+
+<p>You may have to uncomment <em>server_names_hash_bucket_size 64</em></p>
+
+<pre><code>editor /etc/nginx/nginx.conf
+</code></pre>
+
+<h2>
+<a name="configure-supervisor" class="anchor" href="#configure-supervisor"><span class="octicon octicon-link"></span></a>Configure Supervisor</h2>
+
+<p>Create a symlink to the supervisor configuration.</p>
+
+<pre><code>sudo ln -s /home/gitploy/gitploy/server_conf/gitploy_supervisor.conf /etc/supervisor/conf.d/
+</code></pre>
+
+<p>Restart supervisor</p>
+
+<pre><code>sudo service supervisor restart
+</code></pre>
+
+<h2>
+<a name="done" class="anchor" href="#done"><span class="octicon octicon-link"></span></a>Done!</h2>
+
+<p>Congrats! Your installation should now be up and running. Happy Deploying!</p>
+      </section>
     </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">GitPloy maintained by <a href="https://github.com/felixkosmalla">felixkosmalla</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
   </body>
 </html>
