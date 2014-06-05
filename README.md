@@ -1,14 +1,12 @@
 # GitPloy
 
-![](http://felixkosmalla.github.io/gitploy/images/deploy_1.png)
-
-GitPloy enables you to build your own self-contained versioning and deployment system. Backed by [Django](https://www.djangoproject.com/) it seamlessly integrates with your GitLab installation and allows you to host your repositories and push changes directly to your staging or production servers, either via remote execution of shell scripts or FTP synchronization. Deployment Hooks is inspired by Beanstalk. 
+GitPloy enables you to build your own self-contained versioning and deployment system. Backed by [Django](https://www.djangoproject.com/), it seamlessly integrates with your GitLab installation and allows you to host your repositories and push changes directly to your staging or production servers, either via remote execution of shell scripts or FTP synchronization. Deployment Hooks is inspired by Beanstalk. 
 
 
 Installation
 ============
 
-Since GitPloy runs with Django, the setup follows the standard steps like a normal Django installation. I made good experiences with a stack of [nginx](http://nginx.org/), [supervisor](http://supervisord.org/) and [gunicorn](http://gunicorn.org/).
+Since GitPloy runs with Django, the setup follows the standard steps like a normal Django installation. I made good experiences with a stack of [nginx](http://nginx.org/), [supervisor](http://supervisord.org/), and [gunicorn](http://gunicorn.org/).
 
 The following instruction is written for Ubuntu, but I'm sure it is very similar to other Linux distributions.
 
@@ -44,7 +42,7 @@ Install supervisor and [virtualenv](https://virtualenv.pypa.io/en/latest/)
 	
 
 
-Create a System User
+1) Create a System User
 --------------------
 
 Ok, you have the basics now, let's create a system user and a ssh key. Chose the default settings for the ssh key.
@@ -58,7 +56,7 @@ We also need to disable host-key checking for your repository machine.
 	echo -e "Host git.YOUR_COMPANY.org\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 	
 	
-Get the Latest GitPloy 
+2) Get the Latest GitPloy 
 ----------------------
 	
 We store all the GitPloy files in our new user's home directory
@@ -71,7 +69,7 @@ We store all the GitPloy files in our new user's home directory
 	git checkout 1-0-stable
 
 	
-Create a Virtual Environment and Activate it
+3) Create a Virtual Environment and Activate it
 --------------------------------------------
 	
 	cd ~
@@ -80,7 +78,7 @@ Create a Virtual Environment and Activate it
 
 
 	
-Install the Requirements
+4) Install the Requirements
 ------------------------
 
 Your virtual environment still has to be activated
@@ -90,14 +88,14 @@ Your virtual environment still has to be activated
 	pip install --pre -r requirements.txt
 	
 
-Install a Database
+5) Install a Database
 ------------------
 If you want, you can install a database like Postgres or MySQL but you can also run the installation on Sqlite which is the default setting. For this you have to do nothing.
 
 TODO: Postgres installation
 
 
-Edit You Local Settings
+6) Edit You Local Settings
 -----------------------
 	
 	cd ~
@@ -112,7 +110,7 @@ You can find out your public key by doing
 	
 
 
-Create Some Directories
+7) Create Some Directories
 -----------------------
 
 	cd ~
@@ -128,7 +126,7 @@ Create Some Directories
 	touch logs/nginx_error.log
 	
 
-Setup your Database and Static Files
+8) Setup your Database and Static Files
 ------------------------------------
 
 	cd ~
@@ -138,7 +136,7 @@ Setup your Database and Static Files
 	./manage.py collectstatic --noinput
 
 
-Test your Django Installation
+9) Test your Django Installation
 ----------------------------
 Wow, halfway done. Let's see if everything went right so far.
 
@@ -147,7 +145,7 @@ Wow, halfway done. Let's see if everything went right so far.
 You see something that is not an error page? Good job, let's continue!
 
 
-Configure Nginx
+10) Configure Nginx
 ---------------
 Find the line where it says _server_name_ and change that according to the desired URL of your gitploy installation. We than create a symlink to the sites configuration of nginx.
 
@@ -170,7 +168,7 @@ You may have to uncomment _server_names_hash_bucket_size 64_
 	
 
 	
-Configure Supervisor
+11) Configure Supervisor
 --------------------
 Create a symlink to the supervisor configuration.
 
@@ -181,14 +179,25 @@ Restart supervisor
 	sudo service supervisor restart
 	
 	
-Done!
+12) Done!
 -----
 
 Congrats! Your installation should now be up and running. Happy Deploying!
 	
-
-
 	
+
+
+Contributing
+============
+
+You want to contribute? Awesome! Fork this repository and do a pull request.
+
+
+Development Environment
+-----------------------
+
+Just follow steps 2) - 9) and you are ready to go.
+
 
 	
 	
