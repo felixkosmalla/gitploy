@@ -11,7 +11,7 @@ Since GitPloy runs with Django, the setup follows the standard steps like a norm
 The following instruction is written for Ubuntu, but I'm sure it is very similar to other Linux distributions.
 
 
-Installing the stack
+0) Installing the stack
 --------------------
 
 Install gitlab following this instruction.
@@ -196,7 +196,7 @@ You want to contribute? Awesome! Fork this repository and do a pull request.
 Development Environment
 -----------------------
 
-Just follow steps 2) - 9) and you are ready to go.
+Just follow steps 0) and 2) - 9) and you are ready to go.
 
 
 	
