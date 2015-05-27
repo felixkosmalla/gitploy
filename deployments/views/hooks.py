@@ -61,7 +61,7 @@ def add_hook(request, project_id):
                 git = gitlab.Gitlab(settings.GITLAB_URL, request.user.settings.gitlab_token)
                 url_hook = request.build_absolute_uri(hook.get_absolute_url())
 
-                if git.addprojecthook(hook.project.gitlab_id, url_hook):
+                if git.addprojecthook(hook.project.gitlab_id, url_hook, push=True):
                     messages.add_message(request, messages.SUCCESS, "Hook registered in GitLab")
                 else:
                     messages.add_message(request, messages.ERROR, "Hook could not be registered")
