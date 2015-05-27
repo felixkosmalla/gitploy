@@ -6,7 +6,7 @@
 
 gunicorn
 
-django
+django==1.6
 south
 django-bootstrap3
 fabric
